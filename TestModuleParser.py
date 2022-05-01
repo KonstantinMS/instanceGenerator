@@ -3,7 +3,7 @@ import moduleParser
 
 class TestModuleParser(unittest.TestCase):
     def setUp(self):
-        self.SimpleString = \
+        self.stringPattern1 = \
         '''module Y8 (
   output 	      i_CLK_13m5,    	//  serial clock
   input 	      i_RST,          	//  hight for reset
@@ -31,7 +31,7 @@ assign ww = PIX_CNT_o ^ LINE_CNT_o;
 
 endmodule
         '''
-        self.SimpleStringResult = \
+        self.StringResultPattern1 = \
             '''module Y8_0 (
 .i_CLK_13m5 (  ),
 .i_RST      (  ),
@@ -44,11 +44,32 @@ endmodule
 .DATA_RQ_o  (  ),
 .Y_data_o   (  )
 );'''
-    def test_SimpleString(self):
-        self.assertEqual(moduleParser.getInstance(self.SimpleString), self.SimpleStringResult)
 
+        self.stringPattern2 = \
+'''module Y8 (i_CLK_13m5, i_RST, 
+  HSYNC_o,          //  horizontal synchronization
+  DATA_RQ_o);
+output 	       i_CLK_13m5;
+input 	       i_RST;
+output         HSYNC_o;
+inout          DATA_RQ_o;
+'''
+
+        self.StringResultPattern2 = \
+'''module Y8_0 (
+.i_CLK_13m5 (  ),
+.i_RST      (  ),
+.HSYNC_o    (  ),
+.DATA_RQ_o  (  )
+);'''
     def test_zeroString(self):
         self.assertEqual(moduleParser.getInstance(''), 'Введена пустая строка')
+
+    def test_String_pattern1(self):
+        self.assertEqual(moduleParser.getInstance(self.stringPattern1), self.StringResultPattern1)
+    def test_String_pattern2(self):
+        self.assertEqual(moduleParser.getInstance(self.stringPattern2), self.StringResultPattern2)
+
 
 
 if __name__ == "__main__":
