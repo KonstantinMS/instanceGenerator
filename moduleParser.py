@@ -32,25 +32,11 @@ def getInstance (s, postfix ='_0'):
             ports = parseVerilogPatternSimple(s)
         else:
             ports = parseVerilogPatternPattern2(s)
-
-    # формируем результат
-    # имя
-    out = 'module' + ' ' + ModuleName + postfix+' (\n'
-    try:
-        # переменные
-        maxLen = len( max( ports, key=len ) )
-        for i, item in enumerate(ports):
-            out += ('.' + item.ljust(maxLen, ' ') + ' (  )')
-            if i != len(ports)-1:
-                out += ',\n'
-        print('\n')
-        out += '\n);'
-    except:
-        out += 'Не нашел ни одного порта);'
-    # закрывающая строка
-    print(out)
-    return out
-
+    elif language == 'VHDL':
+        return 'VHDL сейчас не поддерживается'
+    else:
+        return 'Не удалось найти модуль'
+    return createModule(ports, ModuleName, postfix)
 
 def deleteComments (s):
     # удалим все комментарии // и /* */
@@ -108,5 +94,23 @@ def parseVerilogPatternPattern2(s):
     ports = res.split(',')
     return ports
 
+def createModule (ports, ModuleName, postfix):
+    # формируем результат
+    # имя
+    out = 'module' + ' ' + ModuleName + postfix + ' (\n'
+    try:
+        # переменные
+        maxLen = len(max(ports, key=len))
+        for i, item in enumerate(ports):
+            out += ('.' + item.ljust(maxLen, ' ') + ' (  )')
+            if i != len(ports) - 1:
+                out += ',\n'
+        print('\n')
+        # закрывающая строка
+        out += '\n);'
+    except:
+        out += 'Не нашел ни одного порта);'
+    return out
+
 if __name__ == "__main__":
-    getInstance(s)
+    print(getInstance(s))
