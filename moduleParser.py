@@ -85,6 +85,7 @@ def parseVerilogPatternSimple(s):
         ports.append(last[0])
     return ports
 
+
 def parseVerilogPatternPattern2(s):
     # оставим только то, что в скобках
     res = s[s.find('(')+1: s.find(')')]
@@ -94,11 +95,12 @@ def parseVerilogPatternPattern2(s):
     ports = res.split(',')
     return ports
 
+
 def createModule (ports, ModuleName, postfix):
     # формируем результат
-    # имя
-    out = 'module' + ' ' + ModuleName + postfix + ' (\n'
     try:
+        # имя
+        out = 'module' + ' ' + ModuleName + postfix + ' (\n'
         # переменные
         maxLen = len(max(ports, key=len))
         for i, item in enumerate(ports):

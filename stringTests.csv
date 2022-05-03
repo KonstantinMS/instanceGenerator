@@ -48,4 +48,6 @@ inout   [7:0]       DATA_RQ_o;";"module Y8_0 (
 .i_RST      (  ),
 .HSYNC_o    (  ),
 .DATA_RQ_o  (  )
-);"
+)"
+1;1
+;
