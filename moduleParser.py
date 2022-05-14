@@ -6,7 +6,7 @@ import re
 # преобразуем в список, чтобы далее разбить на слова
 
 s =\
-'''module Y8 (i_CLK_13m5, i_RST, 
+'''module Y8(i_CLK_13m5, i_RST, 
     HSYNC_o,          //  horizontal synchronization
     DATA_RQ_o);
     output 	       i_CLK_13m5;
@@ -26,7 +26,7 @@ def getInstance (s, postfix ='_0'):
 
     if language == 'verilog':
         # запомним имя модуля
-        ModuleName = s[s.find('module') + 7: s.find('(') - 1].strip()
+        ModuleName = s[s.find('module') + 7: s.find('(')].strip()
         # если скобки содержат описания направления портов
         if re.match(r'(.*?)[input|output|inout] (.*?)\);', s, flags=re.S):
             ports = parseVerilogPatternSimple(s)
