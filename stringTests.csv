@@ -48,6 +48,18 @@ inout   [7:0]       DATA_RQ_o;";"module Y8_0 (
 .i_RST      (  ),
 .HSYNC_o    (  ),
 .DATA_RQ_o  (  )
-)"
+);"
 1;1
 ;
+"module Y8(i_CLK_13m5, i_RST,
+  HSYNC_o,          //  horizontal synchronization
+  DATA_RQ_o);
+output        i_CLK_13m5;
+input         i_RST;
+output         HSYNC_o;
+inout   [7:0]       DATA_RQ_o;";"module Y8_0 (
+.i_CLK_13m5 (  ),
+.i_RST      (  ),
+.HSYNC_o    (  ),
+.DATA_RQ_o  (  )
+);"
