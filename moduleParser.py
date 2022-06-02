@@ -6,13 +6,13 @@ import re
 # преобразуем в список, чтобы далее разбить на слова
 
 s =\
-'''module Y8(i_CLK_13m5, i_RST, 
-    HSYNC_o,          //  horizontal synchronization
-    DATA_RQ_o);
-    output 	       i_CLK_13m5;
-    input 	       i_RST;
-    output         HSYNC_o;
-    inout          DATA_RQ_o;
+'''module Y8(i_CLK_13m5, i_RST,
+  HSYNC_o,          //  horizontal synchronization
+  DATA_RQ_o);
+output        i_CLK_13m5;
+input         i_RST;
+output         HSYNC_o;
+inout   [7:0]       DATA_RQ_o;
 '''
 
 
@@ -100,7 +100,7 @@ def createModule (ports, ModuleName, postfix):
     # формируем результат
     try:
         # имя
-        out = 'module' + ' ' + ModuleName + postfix + ' (\n'
+        out = ModuleName + ' ' + ModuleName + postfix + ' (\n'
         # переменные
         maxLen = len(max(ports, key=len))
         for i, item in enumerate(ports):

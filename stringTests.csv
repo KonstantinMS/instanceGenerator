@@ -25,7 +25,7 @@ assign ww = PIX_CNT_o ^ LINE_CNT_o;
 */
 
 endmodule
-        ";"module Y8_0 (
+        ";"Y8 Y8_0 (
 .i_CLK_13m5 (  ),
 .i_RST      (  ),
 .i_EN       (  ),
@@ -43,7 +43,7 @@ endmodule
 output        i_CLK_13m5;
 input         i_RST;
 output         HSYNC_o;
-inout   [7:0]       DATA_RQ_o;";"module Y8_0 (
+inout   [7:0]       DATA_RQ_o;";"Y8 Y8_0 (
 .i_CLK_13m5 (  ),
 .i_RST      (  ),
 .HSYNC_o    (  ),
@@ -57,7 +57,7 @@ inout   [7:0]       DATA_RQ_o;";"module Y8_0 (
 output        i_CLK_13m5;
 input         i_RST;
 output         HSYNC_o;
-inout   [7:0]       DATA_RQ_o;";"module Y8_0 (
+inout   [7:0]       DATA_RQ_o;";"Y8 Y8_0 (
 .i_CLK_13m5 (  ),
 .i_RST      (  ),
 .HSYNC_o    (  ),
