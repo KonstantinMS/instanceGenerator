@@ -6,12 +6,11 @@ import re
 # преобразуем в список, чтобы далее разбить на слова
 
 s =\
-'''module equals(
-  inout [ `def:0 ] i_a,
-  input i_b = 0,
-  input i_c= 0,          //  comment
-  input i_d =0,
-  input i_e=0);
+'''module equals(inout [7:0]i_a,
+  input [ `def:0 ]i_b = 0, i_c,        
+  input i_d=0, 
+  i_e
+  )   ;
 reg        o_z;
 '''
 
@@ -21,6 +20,7 @@ def getInstance (s, postfix ='_0'):
     if s == '':
         return f'Введена пустая строка'
     s = deleteComments(s)
+
     # определим язык, verilog vs VHDL
     language = identifyProgLang(s)
 
@@ -28,7 +28,7 @@ def getInstance (s, postfix ='_0'):
         # запомним имя модуля
         ModuleName = s[s.find('module') + 7: s.find('(')].strip()
         # если скобки содержат описания направления портов
-        if re.match(r'(.*?)[input|output|inout] (.*?)\);', s, flags=re.S):
+        if re.match(r'(.*?)[input|output|inout] (.*?)\)(.*);', s, flags=re.S):
             ports = parseVerilogPatternRoundBrackets(s)
         else:
             ports = parseVerilogPatternPatternPorts(s)
@@ -42,6 +42,10 @@ def deleteComments (s):
     # удалим все комментарии // и /* */
     return re.sub('//.*?\n|/\*.*?\*/', '', s, flags=re.S)
 
+def deleteSpaces (s):
+    # удалим все комментарии // и /* */
+    return s.replace(' ', '')
+
 
 def identifyProgLang (s):
     if re.search(r'module.*?\(', s, flags=re.S):
@@ -53,9 +57,11 @@ def identifyProgLang (s):
 
 
 def parseVerilogPatternRoundBrackets(s):
-    # получим содержание скобок модуля
-    ModuleString = s[s.find('module'): s.find(');') + 2]
 
+    # получим содержание скобок модуля
+    ModuleString = s[s.find('(')+1: s.find(')')]
+    # удалим все переносы (чтобы в итоге ');' оказался в конце
+    ModuleString = ModuleString.replace('\n', '')
     remove_list = ['input', 'output', 'inout', 'reg', 'wire', 'int', 'bit', 'logic', 'packet_t', ',']
     ports = []
     # разбиваем на строки по запятой и делим на строки
@@ -63,12 +69,13 @@ def parseVerilogPatternRoundBrackets(s):
 
     lines = d.split('\n')
 
+
     for line in lines:
-        result1 = re.match(r'(.+)[input|output|inout] (.+),', line)
-        result2 = re.match(r'(.+)[input|output|inout] (.+)', line)
+        result1 = re.match(r'(.+),', line)
+        result2 = re.match(r'(.+)', line)
         if result1 is not None:
             # удалить [*]
-            line = [re.sub(r'\[[^\[\]]*\]\ ', '', line)]
+            line = [re.sub(r'\[[^\[\]]*\]', '', line)]
             # удалить [=*]
             line = [''.join(line).split("=")[0]]
             # Удалить из списка

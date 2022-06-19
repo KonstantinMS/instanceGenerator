@@ -76,3 +76,15 @@ reg        o_z;";"equals equals_0 (
 .i_d (  ),
 .i_e (  )
 );"
+"module equals(inout [7:0]i_a,
+  input [ `def:0 ]i_b = 0, i_c,
+  input i_d=0,
+  i_e
+  )   ;
+reg        o_z;";"equals equals_0 (
+.i_a (  ),
+.i_b (  ),
+.i_c (  ),
+.i_d (  ),
+.i_e (  )
+);"
