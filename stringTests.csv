@@ -63,3 +63,16 @@ inout   [7:0]       DATA_RQ_o;";"Y8 Y8_0 (
 .HSYNC_o    (  ),
 .DATA_RQ_o  (  )
 );"
+"module equals(
+  inout [ `def:0 ] i_a,
+  input i_b = 0,
+  input i_c= 0,          //  comment
+  input i_d =0,
+  input i_e=0);
+reg        o_z;";"equals equals_0 (
+.i_a (  ),
+.i_b (  ),
+.i_c (  ),
+.i_d (  ),
+.i_e (  )
+);"

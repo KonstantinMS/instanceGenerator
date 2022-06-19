@@ -6,13 +6,13 @@ import re
 # преобразуем в список, чтобы далее разбить на слова
 
 s =\
-'''module Y8(i_CLK_13m5, i_RST,
-  HSYNC_o,          //  horizontal synchronization
-  DATA_RQ_o);
-output        i_CLK_13m5;
-input         i_RST;
-output         HSYNC_o;
-inout   [7:0]       DATA_RQ_o;
+'''module equals(
+  inout [ `def:0 ] i_a,
+  input i_b = 0,
+  input i_c= 0,          //  comment
+  input i_d =0,
+  input i_e=0);
+reg        o_z;
 '''
 
 
@@ -29,9 +29,9 @@ def getInstance (s, postfix ='_0'):
         ModuleName = s[s.find('module') + 7: s.find('(')].strip()
         # если скобки содержат описания направления портов
         if re.match(r'(.*?)[input|output|inout] (.*?)\);', s, flags=re.S):
-            ports = parseVerilogPatternSimple(s)
+            ports = parseVerilogPatternRoundBrackets(s)
         else:
-            ports = parseVerilogPatternPattern2(s)
+            ports = parseVerilogPatternPatternPorts(s)
     elif language == 'VHDL':
         return 'VHDL сейчас не поддерживается'
     else:
@@ -52,7 +52,7 @@ def identifyProgLang (s):
         return None
 
 
-def parseVerilogPatternSimple(s):
+def parseVerilogPatternRoundBrackets(s):
     # получим содержание скобок модуля
     ModuleString = s[s.find('module'): s.find(');') + 2]
 
@@ -60,6 +60,7 @@ def parseVerilogPatternSimple(s):
     ports = []
     # разбиваем на строки по запятой и делим на строки
     d = ModuleString.replace(",", ",\n")
+
     lines = d.split('\n')
 
     for line in lines:
@@ -68,6 +69,8 @@ def parseVerilogPatternSimple(s):
         if result1 is not None:
             # удалить [*]
             line = [re.sub(r'\[[^\[\]]*\]\ ', '', line)]
+            # удалить [=*]
+            line = [''.join(line).split("=")[0]]
             # Удалить из списка
             buf = (''.join([x for x in re.split(r'(\W+)', ' '.join(line)) if x not in remove_list]))
             # удалить запятые
@@ -77,8 +80,13 @@ def parseVerilogPatternSimple(s):
             ports.append(buf[0])
         # обработка последней строки
         if result1 == None and result2 != None:
+            # удалить [*]
             last = [re.sub(r'\[[^\[\]]*\]\ ', '', line)]
+            # удалить [=*]
+            last = [''.join(last).split("=")[0]]
+            # Удалить из списка
             last = (''.join([x for x in re.split(r'(\W+)', ' '.join(last)) if x not in remove_list]))
+            # удалить запятые
             last = re.sub(r',', '', last)
             last = last.split()
     if 'last' in locals():
@@ -86,7 +94,7 @@ def parseVerilogPatternSimple(s):
     return ports
 
 
-def parseVerilogPatternPattern2(s):
+def parseVerilogPatternPatternPorts(s):
     # оставим только то, что в скобках
     res = s[s.find('(')+1: s.find(')')]
     # удалим все пробелы и переносы
